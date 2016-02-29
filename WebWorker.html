@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>WebWorkers - ilość losowo wypisywanych słów</title>
+</head>
+<body>
+<p>	
+	Ile wypisać wyrazów: <input type="text" id="num" />
+	<button id="submit">Wypisz</button>
+</p>
+<div id="panel"></div>
+
+<script>
+
+	// Tworzenie Workera
+	var worker = new Worker("words.js");
+	
+	// Wywołanie funkcji event - wypisanie losowych wyrazów w div'ie "panel"
+	worker.onmessage = function(event)
+	{
+		console.log(event);
+		document.getElementById("panel").innerText = event.data.text;
+	};
+	
+	// Pobieramy liczbę wyrazów z textBox'a po akcji kliknięcia przycisku
+	document.getElementById("submit").onclick = function()
+	{
+		var totalWords = document.getElementById("num").value;
+		document.getElementById("panel").innerText = "";
+		worker.postMessage({num: totalWords});
+	};
+	
+</script>
+
+</body>
+</html>
